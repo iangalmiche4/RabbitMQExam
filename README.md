@@ -6,6 +6,7 @@
 - Docker Compose
 - Python 3.x
 - `pip` (Python package installer)
+- `npm` (Node package manager)
 
 ## Installation
 
@@ -40,64 +41,53 @@
     docker-compose up -d
     ```
 
-Accès à l'interface de gestion de RabbitMQ
-Ouvrez un navigateur et accédez à http://localhost:15672.
+### Accès à l'interface de gestion de RabbitMQ
+
+Ouvrez un navigateur et accédez à [http://localhost:15672](http://localhost:15672).  
 Connectez-vous avec les identifiants :
-Nom d'utilisateur : user
-Mot de passe : password
+- Nom d'utilisateur : `user`
+- Mot de passe : `password`
 
 ## Utilisation
 
-### Producteur et Consommateur basiques
+### Lancement du Backend
 
-#### Consommateur
-Le script consumer.py reçoit les messages de la file d'attente.
+1. Démarrez le backend Flask qui inclut le consommateur RabbitMQ :
 
-Exécution du consommateur :
+    ```bash
+    python app.py
+    ```
 
-```bash
-python src/consumer.py
-```
+### Lancement du Frontend
 
-#### Producteur
+1. Dans un nouveau terminal, naviguez vers le répertoire `frontend`, installez les dépendances et démarrez le serveur frontend :
 
-Le script `producer.py` envoie des messages à la file d'attente `hello`.
+    ```bash
+    cd frontend
+    npm install
+    npm start
+    ```
 
-Exécution du producteur :
-```bash
-python src/producer.py "Hello World"
-```
+### Tester le Frontend
 
+1. **Ouvrez le Frontend** :
+   - Accédez à [http://localhost:8080](http://localhost:8080) dans votre navigateur.
 
-### Producteur et Consommateur avec Routage Direct
+2. **Créer un Utilisateur** :
+   - Entrez un nom d'utilisateur dans le champ "Username".
+   - Cliquez sur "Create User".
 
-#### Consommateur Direct
-Le script consumer_direct.py reçoit les messages de l'échange direct_logs en fonction des clés de routage spécifiées.
+3. **Envoyer un Message Normal** :
+   - Dans la section "Send Normal Message":
+     - Entrez un message dans le champ "Message".
+     - Entrez le nom d'utilisateur de la queue dans le champ "Username".
+     - Cliquez sur "Send Message".
 
-Exécution du consommateur direct :
-Écouter uniquement les messages d'information :
+### Voir les Logs
 
-```bash
-python src/consumer_direct.py "info"
-```
+Les messages reçus seront affichés dans la section "Messages Received" sur le frontend.
 
-#### Exécution du producteur direct :
+#### Logs dans le terminal
 
-Le script producer_direct.py envoie des messages à l'échange direct_logs avec une clé de routage.
-
-```bash
-python src/producer_direct.py "Ceci est un message informatif" "info"
-```
-
-
-#### Envoyer un message d'erreur :
-
-```bash
-python src/producer_direct.py "Ceci est un message d'erreur" "error"
-```
-
-#### Écouter les messages d'information et d'erreur :
-
-```bash
-python src/consumer_direct.py "info" "error"
-```
+1. Les logs du consommateur et du backend Flask seront affichés dans le terminal où `python app.py` est exécuté.
+2. Les logs de RabbitMQ peuvent être consultés dans l'interface de gestion de RabbitMQ sous l'onglet "Queues" ou "Exchanges" en fonction du type de message.
