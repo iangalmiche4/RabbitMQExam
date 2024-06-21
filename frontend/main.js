@@ -13,10 +13,12 @@ document.getElementById('createUser').addEventListener('click', () => {
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
+        alert(`User ${username} created successfully!`);
         startConsumer(username);
     })
     .catch((error) => {
         console.error('Error:', error);
+        alert(`Failed to create user ${username}.`);
     });
 });
 
@@ -37,11 +39,18 @@ document.getElementById('sendMessage').addEventListener('click', () => {
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
+        alert(`Message sent to ${username} successfully!`);
         fetchMessages(username);
     })
     .catch((error) => {
         console.error('Error:', error);
+        alert(`Failed to send message to ${username}.`);
     });
+});
+
+document.getElementById('viewMessages').addEventListener('click', () => {
+    const username = document.getElementById('viewUserQueue').value;
+    fetchMessages(username);
 });
 
 function startConsumer(username) {
@@ -57,7 +66,6 @@ function startConsumer(username) {
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
-        fetchMessages(username);
     })
     .catch((error) => {
         console.error('Error:', error);
